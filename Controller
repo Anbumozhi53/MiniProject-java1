@@ -1,0 +1,30 @@
+@Controller
+@RequestMapping("/employees")
+public class EmployeeController {
+    @Autowired
+    private EmployeeService service;
+
+    @GetMapping
+    public String listEmployees(Model model) {
+        model.addAttribute("employees", service.getAllEmployees());
+        return "employee_list";
+    }
+
+    @GetMapping("/new")
+    public String showFormForAdd(Model model) {
+        model.addAttribute("employee", new Employee());
+        return "employee_form";
+    }
+
+    @PostMapping("/save")
+    public String saveEmployee(@ModelAttribute("employee") Employee employee) {
+        service.saveEmployee(employee);
+        return "redirect:/employees";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteEmployee(@PathVariable("id") Long id) {
+        service.deleteEmployee(id);
+        return "redirect:/employees";
+    }
+}
